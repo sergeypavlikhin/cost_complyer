@@ -42,7 +42,13 @@ public class Cost implements Cloneable, Comparable<Cost> {
 
         Cost cost = (Cost) o;
 
-        return id == cost.id;
+        if (id != cost.id) return false;
+        if (number != cost.number) return false;
+        if (depart != cost.depart) return false;
+        if (value != cost.value) return false;
+        if (!product_code.equals(cost.product_code)) return false;
+        if (!begin.equals(cost.begin)) return false;
+        return end.equals(cost.end);
     }
 
     @Override
@@ -125,5 +131,26 @@ public class Cost implements Cloneable, Comparable<Cost> {
        if(end.after(o.end)) return 1;
        else if (end.before(o.end))return -1;
        else return 0;
+    }
+
+    public boolean isValidPeriod(){
+        return begin.before(end);
+    }
+
+    public boolean aboutSameProduct(Cost cost){
+        return product_code.equals(cost.product_code) && number == cost.number && depart == cost.depart;
+    }
+
+    @Override
+    public String toString() {
+        return "Cost{" +
+                "id=" + id +
+                ", product_code='" + product_code + '\'' +
+                ", number=" + number +
+                ", depart=" + depart +
+                ", begin=" + begin +
+                ", end=" + end +
+                ", value=" + value +
+                '}';
     }
 }

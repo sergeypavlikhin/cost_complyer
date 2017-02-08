@@ -4,6 +4,7 @@ import com.crystal.entities.Cost;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,28 +30,24 @@ public class CostMergeUtils {
         List<Cost> result = new ArrayList<Cost>();
         Cost reserved = oldCost.clone();
 
-        if(oldCost.getBegin().before(newCost.getBegin())){
-            oldCost.setEnd(newCost.getBegin());
-            result.add(oldCost);
-        }
-        if(reserved.getEnd().after(newCost.getEnd())){
-            reserved.setBegin(newCost.getEnd());
+        if(reserved.getBegin().before(newCost.getBegin())){
+            reserved.setEnd(newCost.getBegin());
             result.add(reserved);
         }
-
-        result.add(newCost);
+        oldCost.setBegin(newCost.getEnd());
 
         return result;
     }
 
     private static List<Cost> mergeDates(Cost oldCost, Cost newCost) {
+        if(newCost.getEnd().before(oldCost.getEnd())){
+            newCost.setEnd(oldCost.getEnd());
+        }
         if(oldCost.getBegin().before(newCost.getBegin())){
             newCost.setBegin(oldCost.getBegin());
         }
-        if(oldCost.getEnd().after(newCost.getEnd())){
-            newCost.setEnd(oldCost.getEnd());
-        }
-        return Arrays.asList(newCost);
+        oldCost.setBegin(oldCost.getEnd());
+        return Collections.emptyList(); //Why return empty list? Because method implementation can will be changed
     }
 
 }
